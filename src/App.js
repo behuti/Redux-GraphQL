@@ -1,7 +1,7 @@
-import React from 'react';
-import './App.css';
-import { NavLink } from 'react-router-dom'
-import Routes from './Routes';
+import React from "react";
+import "./App.css";
+import { NavLink } from "react-router-dom";
+import Routes from "./Routes";
 
 function App() {
   return (
