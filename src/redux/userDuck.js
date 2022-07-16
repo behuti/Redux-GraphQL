@@ -26,21 +26,40 @@ export default function reducer(state = initialData, action) {
 
 // Utils
 function saveStorage(storage) {
-  localStorage.storage = JSON.stringify(storage)
+  localStorage.storage = JSON.stringify(storage);
 }
 
 // Action (action creator)
-export const doGoogleLoginAction = () => (dispatch, getState) => {
-  return loginWithGoogle().then((user) => {
+export const restoreSessionAction = () => (dispatch, getState) => {
+  let storage = localStorage.getItem('storage')
+  storage = JSON.parse(storage)
+  if ( storage && storage.user) {
     dispatch({
       type: LOGIN_SUCCESS,
-      payload: { ...user },
+      payload: storage.user
     });
-    saveStorage(getState())
-  }).catch(e => {
-    dispatch({
-      type: LOGIN_FAIL,
-      payload: e.message
+  }
+}
+
+export const doGoogleLoginAction = () => (dispatch, getState) => {
+  return loginWithGoogle()
+    .then((user) => {
+      const { uid, displayName, photoURL } = user;
+      console.log(user)
+      dispatch({
+        type: LOGIN_SUCCESS,
+        payload: {
+          uid,
+          displayName,
+          photoURL,
+        },
+      });
+      saveStorage(getState());
     })
-  });
+    .catch((e) => {
+      dispatch({
+        type: LOGIN_FAIL,
+        payload: e.message,
+      });
+    });
 };

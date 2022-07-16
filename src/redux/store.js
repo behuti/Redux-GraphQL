@@ -1,5 +1,5 @@
 import { createStore, combineReducers, compose, applyMiddleware } from "redux";
-import userReducer from "./userDuck";
+import userReducer, {restoreSessionAction} from "./userDuck";
 import charsReducer, { getCharactersAction } from "./charsDuck";
 import thunk from "redux-thunk";
 
@@ -18,5 +18,6 @@ export default function generateStore() {
   );
   // Get characters for the first time
   getCharactersAction()(store.dispatch, store.getState);
+  restoreSessionAction()(store.dispatch)
   return store;
 }
